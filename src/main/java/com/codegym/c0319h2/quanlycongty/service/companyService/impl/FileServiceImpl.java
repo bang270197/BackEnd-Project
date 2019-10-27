@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 import static org.springframework.util.ResourceUtils.getFile;
 @Service
@@ -72,22 +73,20 @@ public class FileServiceImpl implements FileService {
     }
 
 
-    //ham goi file de xoa
-    @Override
-    public File callFileImage(Optional<Company> company) throws FileNotFoundException {
-        String pathFile = img + company.get().getCompanyavatar();
-        File fileName = getFile(pathFile);
-        return fileName;
-    }
+
 
     @Override
     public void deleteImage(Company company) throws IOException {
-        String pathFile = img + company.getCompanyavatar();
-        try {
-            File avatar = FileUtils.getFile(pathFile);
-            FileUtils.forceDelete(avatar);
-        } catch (IOException e) {
-            e.printStackTrace();
+        ArrayList<String> fileName = company.getCompanyavatar();
+        for (String pathFile: fileName){
+            String imgFile = img + '/' + pathFile;
+            try {
+                File avatar = FileUtils.getFile(imgFile);
+                FileUtils.forceDelete(avatar);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 }

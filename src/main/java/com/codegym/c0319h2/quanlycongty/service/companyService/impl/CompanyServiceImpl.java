@@ -7,7 +7,9 @@ import com.codegym.c0319h2.quanlycongty.service.companyService.CompanyService;
 import com.codegym.c0319h2.quanlycongty.model.company.Company;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,10 +44,10 @@ public class CompanyServiceImpl implements CompanyService {
          companyRepository.deleteById(id);
     }
 
-    @Override
-    public Company findAllByCompanyName(String companyName) {
-        return companyRepository.findAllByCompanyName(companyName);
-    }
+//    @Override
+//    public Company findAllByCompanyName(String companyName) {
+//        return companyRepository.findAllByCompanyName(companyName);
+//    }
 
 
     @Override
@@ -53,17 +55,21 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.finByActive();
     }
 
-    @Override
-    public Iterable<Company> findAllByTechnologyAndRelationship(Technology technologies, Relationship relationship) {
-        return companyRepository.findAllByTechnologyAndRelationship(technologies,relationship);
-    }
+
+
 
 
 //    @Override
-//    public Iterable<Company> findAllByRelationship(Relationship relationship) {
-//        return companyRepository.findAllByRelationship(relationship);
+//    public Iterable<Company> findAllByCompanyNameAndTechnologyContaining(String companyName, Technology[] technology) {
+//        return companyRepository.findAllByCompanyNameAndTechnologyContaining(companyName,technology);
 //    }
 
+
+    // tim kiem theo text va obj
+//    @Override
+//    public Iterable<Company> findAllByCompanyNameAndRelationshipContaining(String companyName,@Param("relationship") Relationship relationship) {
+//        return companyRepository.findAllByCompanyNameAndRelationshipContaining(companyName,relationship);
+//    }
 
 
 

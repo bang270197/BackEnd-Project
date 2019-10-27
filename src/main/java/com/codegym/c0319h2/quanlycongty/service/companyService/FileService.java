@@ -13,6 +13,5 @@ public interface FileService {
     void deleteLogo(Company company) throws IOException;
 
     void saveFileLImage(MultipartFile multipartFile);
-    File callFileImage(Optional<Company> company) throws FileNotFoundException;
     void deleteImage(Company company) throws IOException;
 }

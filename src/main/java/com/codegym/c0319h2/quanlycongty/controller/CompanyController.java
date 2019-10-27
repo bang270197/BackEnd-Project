@@ -4,11 +4,13 @@ import com.codegym.c0319h2.quanlycongty.model.Relationship.Relationship;
 import com.codegym.c0319h2.quanlycongty.model.company.Company;
 
 import com.codegym.c0319h2.quanlycongty.model.technology.Technology;
+import com.codegym.c0319h2.quanlycongty.repository.Company.CompanyRepository;
 import com.codegym.c0319h2.quanlycongty.service.RelationshipService.RelationshipService;
 import com.codegym.c0319h2.quanlycongty.service.TechnologyService.TechnologyService;
 import com.codegym.c0319h2.quanlycongty.service.companyService.CompanyService;
 import com.codegym.c0319h2.quanlycongty.service.companyService.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,7 @@ public class CompanyController {
     private TechnologyService technologyService;
     @Autowired
     private RelationshipService relationshipService;
+
     @Autowired
     public CompanyController(CompanyService companyService, FileService fileService) {
         this.companyService = companyService;
@@ -46,8 +50,6 @@ public class CompanyController {
         }
         return new ResponseEntity<List<Company>>(companyList, HttpStatus.OK);
     }
-
-
 
 
     @PostMapping("/company")
@@ -94,6 +96,7 @@ public class CompanyController {
         companyUpdate.setTechnology(company.getTechnology());
         companyUpdate.setMarket(company.getMarket());
         companyUpdate.setNote(company.getNote());
+        companyUpdate.setTags(company.getTags());
         companyService.save(companyUpdate);
 
         return new ResponseEntity<Company>(companyUpdate, HttpStatus.OK);
@@ -121,66 +124,92 @@ public class CompanyController {
     }
 
 
-//    thêm ảnh vào user
-    @PostMapping ("/addLogo/{id}")
-    public ResponseEntity<Company> addAvatar(@PathVariable("id") Long id,@RequestPart("companylogo") MultipartFile file) throws IOException {
+    //    thêm ảnh vào user
+    @PostMapping("/addLogo/{id}")
+    public ResponseEntity<Company> addAvatar(@PathVariable("id") Long id, @RequestPart("companylogo") MultipartFile file) throws IOException {
         Optional<Company> company = companyService.findById(id);
         Company company1 = company.get();
         String fileName = file.getOriginalFilename();
-        if (company1 !=null){
+        if (company1 != null) {
 
-            if (company1.getCompanylogo() !=null){
+            if (company1.getCompanylogo() != null) {
                 fileService.deleteLogo(company1);
                 company1.setCompanylogo(fileName);
                 fileService.saveFileLogo(file);
                 companyService.save(company1);
-                return new ResponseEntity<Company>(company1,HttpStatus.OK);
-            }
-            else {
+                return new ResponseEntity<Company>(company1, HttpStatus.OK);
+            } else {
                 company1.setCompanylogo(fileName);
                 fileService.saveFileLogo(file);
                 companyService.save(company1);
-                return new ResponseEntity<Company>(company1,HttpStatus.OK);
+                return new ResponseEntity<Company>(company1, HttpStatus.OK);
             }
 
-        }else
+        } else
             return new ResponseEntity<Company>(HttpStatus.NOT_FOUND);
     }
 
 
-
-
+// tim kiem 1 doi tuong + 1 text
 //    @GetMapping("/searchCompany")
-//    public ResponseEntity<Iterable<Company>> findAllByRelationship(@RequestBody Relationship relationship){
+//    public ResponseEntity<List<Company>> findAllByCompanyName(@RequestParam("companyName") String companyName,@RequestBody Relationship relationship){
 //
-//        Iterable<Company> companyIterable = (Iterable<Company>) companyService.findAllByRelationship(relationship);
+//        List<Company> companyIterable = (List<Company>) companyService.findAllByCompanyNameAndRelationshipContaining(companyName, relationship);
 //        if (companyIterable == null){
-//            return new ResponseEntity<Iterable<Company>>(HttpStatus.NO_CONTENT);
+//            return new ResponseEntity<List<Company>>(HttpStatus.NO_CONTENT);
 //        }
-//        return new ResponseEntity<Iterable<Company>>(companyIterable,HttpStatus.OK);
+//        return new ResponseEntity<List<Company>>(companyIterable,HttpStatus.OK);
 //    }
 
 
-    @GetMapping("/searchTechnology")
-    public ResponseEntity<Iterable<Company>> findAllByTechnology(@RequestBody Technology technologies,@RequestBody Relationship relationship){
+    @PostMapping(value = "/mutilpartFile/{id}")
+    public ResponseEntity<Company> updateUser(@PathVariable("id") Long id, @RequestPart("companyavatar") MultipartFile[] file) throws IOException {
+        //avatar
+        // Khoi tao mang ten
+        ArrayList<String> fileName = new ArrayList<>();
+        //khoi tao mang luu file
+        ArrayList<File> saveFiles = new ArrayList<>();
 
-        Iterable<Company> companyIterable = companyService.findAllByTechnologyAndRelationship(technologies,relationship);
-        if (companyIterable == null){
-            return new ResponseEntity<Iterable<Company>>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<Iterable<Company>>(companyIterable,HttpStatus.OK);
 
-//        Iterable<Company> companyIterable = companyService.findAllByTechnology(technologies);
-//        if (companyIterable == null){
-//            return new ResponseEntity<Iterable<Company>>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<Iterable<Company>>(companyIterable,HttpStatus.OK);
+
+
+
+        Optional<Company> company = companyService.findById(id);
+        Company company1 = company.get();
+
+        if (company1 !=null){
+            if (company1.getCompanyavatar()!=null){
+                fileService.deleteImage(company1);
+                // luu ten file vao mang
+                for (MultipartFile multipartFile : file) {
+                    fileName.add(multipartFile.getOriginalFilename());
+                }
+                // luu mang file len serve
+                for (MultipartFile multipartFile : file) {
+                    fileService.saveFileLImage(multipartFile);
+                }
+                company1.setCompanyavatar(fileName);
+                companyService.save(company1);
+                return new ResponseEntity<Company>(company1,HttpStatus.OK);
+            }else {
+                // luu ten file vao mang
+                for (MultipartFile multipartFile : file) {
+                    fileName.add(multipartFile.getOriginalFilename());
+                }
+                // luu mang file len serve
+                for (MultipartFile multipartFile : file) {
+                    fileService.saveFileLImage(multipartFile);
+                }
+                company1.setCompanyavatar(fileName);
+                companyService.save(company1);
+                return new ResponseEntity<Company>(company1,HttpStatus.OK);
+            }
+        }else
+        return new ResponseEntity<Company>(company1,HttpStatus.OK);
     }
 
+
 }
-
-
-
 
 
 

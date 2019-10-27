@@ -8,6 +8,7 @@ import com.codegym.c0319h2.quanlycongty.model.Tag.Tags;
 import com.codegym.c0319h2.quanlycongty.model.technology.Technology;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,7 +43,11 @@ public class Company {
     private String companylogo;
 
     @Column(name = "companyavatar")
-    private String companyavatar;
+    private ArrayList<String> companyavatar;
+
+//    ArrayList<String> avatar = new ArrayList<>();
+
+
 
     @ManyToOne
     @JoinColumn(name = "Relationship_id")
@@ -201,11 +206,11 @@ public class Company {
         this.companylogo = companylogo;
     }
 
-    public String getCompanyavatar() {
+    public ArrayList<String> getCompanyavatar() {
         return companyavatar;
     }
 
-    public void setCompanyavatar(String companyavatar) {
+    public void setCompanyavatar(ArrayList<String> companyavatar) {
         this.companyavatar = companyavatar;
     }
 
