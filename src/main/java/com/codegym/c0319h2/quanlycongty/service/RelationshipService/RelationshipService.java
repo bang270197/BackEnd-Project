@@ -9,6 +9,7 @@ public interface RelationshipService {
 
     Optional<Relationship> findById(Long id);
 
+    Relationship showById(Long id);
 //    Relationship findAllByName(String name);
 
 

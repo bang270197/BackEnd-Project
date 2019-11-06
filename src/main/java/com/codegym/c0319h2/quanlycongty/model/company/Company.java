@@ -53,14 +53,29 @@ public class Company {
     @JoinColumn(name = "Relationship_id")
     private Relationship relationship;
 
-    @ManyToMany(targetEntity = Specialize.class)
+//    @ManyToMany(targetEntity = Specialize.class)
+@ManyToMany
+@JoinTable(name = "company_specialize",
+        joinColumns = @JoinColumn(name = "company_id"),
+        inverseJoinColumns = @JoinColumn(name = "specialize_id")
+)
     private List<Specialize> specialize;
 
-    @ManyToMany(targetEntity = Language.class)
+//    @ManyToMany(targetEntity = Language.class)
+@ManyToMany
+@JoinTable(name = "company_language",
+        joinColumns = @JoinColumn(name = "company_id"),
+        inverseJoinColumns = @JoinColumn(name = "language_id")
+)
     private List<Language> language;
 
 
-    @ManyToMany(targetEntity = Technology.class)
+//    @ManyToMany(targetEntity = Technology.class)
+@ManyToMany
+@JoinTable(name = "company_technology",
+        joinColumns = @JoinColumn(name = "company_id"),
+        inverseJoinColumns = @JoinColumn(name = "technology_id")
+)
     private List<Technology> technology;
 
 
@@ -79,7 +94,12 @@ public class Company {
 
 
 
-    @ManyToMany(targetEntity = Market.class)
+//    @ManyToMany(targetEntity = Market.class)
+@ManyToMany
+@JoinTable(name = "company_market",
+        joinColumns = @JoinColumn(name = "company_id"),
+        inverseJoinColumns = @JoinColumn(name = "market_id")
+)
     private List<Market> market;
 
     @Column(name = "note")
@@ -89,28 +109,17 @@ public class Company {
     @Column(name = "active")
     private boolean active;
 
-    @ManyToMany(targetEntity = Tags.class)
+//    @ManyToMany(targetEntity = Tags.class)
+@ManyToMany
+@JoinTable(name = "company_tags",
+        joinColumns = @JoinColumn(name = "company_id"),
+        inverseJoinColumns = @JoinColumn(name = "tags_id")
+)
     private List<Tags> tags;
     public Company() {
     }
 
-//    public Company(String companyName, String shortname, String address, String website, String phonenumber, String email, String introductoryinformation, String relationship, String specialize, String language, List<Technology> technology, String market, String note) {
-//        this.companyName = companyName;
-//        this.shortname = shortname;
-//        this.address = address;
-//        this.website = website;
-//        this.phonenumber = phonenumber;
-//        this.email = email;
-//        this.introductoryinformation = introductoryinformation;
-//        this.relationship = relationship;
-//        this.specialize = specialize;
-//        this.language = language;
-//        this.technology = technology;
-//        this.market = market;
-//        this.note = note;
-//    }
 
-//test Technology
 
 
 

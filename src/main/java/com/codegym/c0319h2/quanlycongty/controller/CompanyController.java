@@ -23,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,6 +71,7 @@ public class CompanyController {
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
         }
         fileService.deleteLogo(company1);
+        fileService.deleteImage(company1);
         company1.setActive(false);
         companyService.save(company1);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -130,6 +132,7 @@ public class CompanyController {
         Optional<Company> company = companyService.findById(id);
         Company company1 = company.get();
         String fileName = file.getOriginalFilename();
+
         if (company1 != null) {
 
             if (company1.getCompanylogo() != null) {
@@ -150,18 +153,6 @@ public class CompanyController {
     }
 
 
-// tim kiem 1 doi tuong + 1 text
-//    @GetMapping("/searchCompany")
-//    public ResponseEntity<List<Company>> findAllByCompanyName(@RequestParam("companyName") String companyName,@RequestBody Relationship relationship){
-//
-//        List<Company> companyIterable = (List<Company>) companyService.findAllByCompanyNameAndRelationshipContaining(companyName, relationship);
-//        if (companyIterable == null){
-//            return new ResponseEntity<List<Company>>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<List<Company>>(companyIterable,HttpStatus.OK);
-//    }
-
-
     @PostMapping(value = "/mutilpartFile/{id}")
     public ResponseEntity<Company> updateUser(@PathVariable("id") Long id, @RequestPart("companyavatar") MultipartFile[] file) throws IOException {
         //avatar
@@ -169,9 +160,6 @@ public class CompanyController {
         ArrayList<String> fileName = new ArrayList<>();
         //khoi tao mang luu file
         ArrayList<File> saveFiles = new ArrayList<>();
-
-
-
 
 
         Optional<Company> company = companyService.findById(id);
@@ -207,6 +195,68 @@ public class CompanyController {
         }else
         return new ResponseEntity<Company>(company1,HttpStatus.OK);
     }
+
+
+
+    // tim kiem 1 doi tuong + 1 text
+    @GetMapping("/searchCompany/{id}")
+    public ResponseEntity<Iterable<Company>> findAllByCompanyName(@RequestParam("companyName") String companyName,@PathVariable("id") Long id){
+        Relationship relationship = relationshipService.showById(id);
+       if (relationship == null){
+           return new ResponseEntity<Iterable<Company>>(HttpStatus.NO_CONTENT);
+       }
+        Iterable<Company> companyIterable =companyService.findAllByCompanyNameAndRelationshipContaining(companyName, relationship);
+        if (companyIterable == null){
+            return new ResponseEntity<Iterable<Company>>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Iterable<Company>>(companyIterable,HttpStatus.OK);
+    }
+
+
+  //tim kiem theo ten
+    @GetMapping("/searchCompanyByName")
+    public ResponseEntity<Iterable<Company>> findCompanyByName(@RequestParam("companyName") String companyName){
+       Iterable<Company> company =  companyService.findAllByCompanyNameContaining(companyName);
+
+          if (company == null){
+            return new ResponseEntity<Iterable<Company>>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Iterable<Company>>(company,HttpStatus.OK);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

@@ -15,7 +15,12 @@ public class Language {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Company.class)
+//    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Company.class)
+    @ManyToMany
+    @JoinTable(name = "company_language",
+    joinColumns = @JoinColumn(name = "language_id"),
+            inverseJoinColumns = @JoinColumn(name = "company_id")
+    )
     @JsonIgnore
     private List<Company> company;
 

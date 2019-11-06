@@ -15,7 +15,12 @@ public class Technology {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Company.class)
+//    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Company.class)
+@ManyToMany
+@JoinTable(name = "company_technology",
+        joinColumns = @JoinColumn(name = "technology_id"),
+        inverseJoinColumns = @JoinColumn(name = "company_id")
+)
     @JsonIgnore
     private List<Company> company;
 

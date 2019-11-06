@@ -7,8 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface CompanyService {
     Iterable<Company> showAll();
@@ -25,10 +27,8 @@ public interface CompanyService {
 
 
 //     tim kiem theo text va obj
-//    Iterable<Company> findAllByCompanyNameAndRelationshipContaining(@Param("companyName") String companyName,@RequestBody Relationship relationship);
-
-
-//    Iterable<Company> findAllByCompanyNameAndTechnologyContaining(@Param("companyName") String companyName,@Param("technology") Technology[] technology);
-
+    Iterable<Company> findAllByCompanyNameAndRelationshipContaining(@Param("companyName") String companyName,@RequestBody Relationship relationship);
+//tim kiem theo ten
+    Iterable<Company> findAllByCompanyNameContaining(@Param("companyName") String companyName);
 
 }

@@ -11,8 +11,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
@@ -58,19 +61,16 @@ public class CompanyServiceImpl implements CompanyService {
 
 
 
-
-//    @Override
-//    public Iterable<Company> findAllByCompanyNameAndTechnologyContaining(String companyName, Technology[] technology) {
-//        return companyRepository.findAllByCompanyNameAndTechnologyContaining(companyName,technology);
-//    }
-
-
     // tim kiem theo text va obj
-//    @Override
-//    public Iterable<Company> findAllByCompanyNameAndRelationshipContaining(String companyName,@Param("relationship") Relationship relationship) {
-//        return companyRepository.findAllByCompanyNameAndRelationshipContaining(companyName,relationship);
-//    }
+    @Override
+    public Iterable<Company> findAllByCompanyNameAndRelationshipContaining(String companyName,@Param("relationship") Relationship relationship) {
+        return companyRepository.findAllByCompanyNameAndRelationshipContaining(companyName,relationship);
+    }
 
+    @Override
+    public Iterable<Company> findAllByCompanyNameContaining(String companyName) {
+        return companyRepository.findAllByCompanyNameContaining(companyName);
+    }
 
 
 }

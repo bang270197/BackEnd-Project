@@ -15,7 +15,13 @@ public class Market {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Company.class)
+
+//    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Company.class)
+@ManyToMany
+@JoinTable(name = "company_market",
+        joinColumns = @JoinColumn(name = "market_id"),
+        inverseJoinColumns = @JoinColumn(name = "company_id")
+)
     @JsonIgnore
     private List<Company> company;
 

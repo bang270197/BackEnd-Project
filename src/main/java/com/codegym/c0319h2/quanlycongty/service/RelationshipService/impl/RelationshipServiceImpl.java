@@ -22,6 +22,11 @@ public class RelationshipServiceImpl implements RelationshipService {
         return relationshipRepository.findById(id);
     }
 
+    @Override
+    public Relationship showById(Long id) {
+        return relationshipRepository.findById(id).orElse(null);
+    }
+
 //    @Override
 //    public Relationship findAllByName(String name) {
 //        return relationshipRepository.findAllByName(name);
